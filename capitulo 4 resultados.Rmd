@@ -1,0 +1,548 @@
+---
+title: "Capitulo 4 Resultados"
+author: "Edgar Moises Martinez Ortiz"
+date: '2022-10-31'
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# CAPITULO 4.
+
+## 4.1. Propuesta
+
+En la tesis presente se menciona que hay una muestra de 10,000 casos muestrales de los cuales solo se lograron obtener 1,447 en parte de latinoamerica. 705 de México y los otros 742 son de los paises siguientes: 
+
+- Guatemala
+- Belice
+- Honduras
+- El Salvador
+- Nicaragua
+- Costa Rica
+- Panama
+- Colombia
+- Ecuador
+- Peru
+- Bolivia
+- Paraguay
+- Chile
+- Uruguay
+- Argentina
+
+De los cuales se obtuvieron en total 181 respuestas que se validaron y de las cuales tendremos los siguientes resultados. Para este análisis se uso el software RStudio con codigo R. RStudio es un ambiente de desarrollo integrado para programar con R, lo cual es un ambiente sumamente intuitivo y amigable. R es un software de uso libre y trabaja con paqueterías o librerías. Una librería es una colección de funciones, datos y documentación sobre las funciones, que incrementan las potencialidades de R. Este sirve para  construir documentos con un análisis sencillo, dentro de la funcionalidad de R conocida como RMarkdown, el cual constituye el objetivo final de este curso. Esta funcionalidad de R brinda ventajas importantes, para la presentación y visualización de información. El capítulo no trata de explicar como funciona dicho software, pero tenemos la obligación de explicar que se uso para el analisis de datos para este capítulo de resultados.
+
+Antes de comenzar debemos de instalar las librerías necesarias para este capítulo, en el cual utilizaremos;
+• ggplot2
+• tidyverse
+
+Una librería es un archivo donde previamente se encuentran un conjunto de comandos o instrucciones para desarrollar determinadas tareas. Una vez instalada debemos indicar a R que deseamos usarla, para ello basta con la instrucción.
+
+```{r}
+library (ggplot2)
+library (tidyverse)
+```
+
+La base de datos con la información requerida lleva por respuestas.csv. La base de datos que hemos cargado a RStudio y que esta contenida en el objeto "respuestas" se conoce como un data frame. Podemos darnos cuenta de esto si usamos el comando class, el cual nos permite determinar el tipo de objeto en R con el que estamos trabajando.
+
+De los cuales tenemos diferentes respuestas que tenemos que analizar y darle un sentido logico a los resutados obtenidos, por enden analizaremos cada una de los vectores que se preguntaron. Esto lo obtendremos del archivo que obtuvimos del formato de encuentras de Google. Siendo que se hizo una modificación en ocultar los datos de los que contestaron, su correo electrónico y edad. 
+
+```{r}
+respuestas<- read.csv("respuestas.csv")
+
+```
+
+### Cargo que se ostenta.
+
+Una gráfica usando ggplot2 tiene tres componentes básicos y la estructura más general de la instrucción se conforma por; 
+
+ggplot(data = DATA) + GEOM_FUNCTION(mapping = aes(MAPPINGS))
+
+Donde:
+
+• DATA se refiere al nombre del objeto donde esta almacenada la información.
+
+• GEOM_FUNCTION se refiere al tipo de gráfica a realizarse (por ejemplo; la función geométrica geom_point permite construir una gráfica de puntos, mientras que la función geom_bar permite construir una gráfica de barras).
+
+• MAPPINGS se refiere a todos los componentes específicos de la gráfica que deseemos trabajar.
+
+
+Para crear diferentes gráficas y una amplia variedad de MAPPINGS. Por ejemplo, si es de nuestro interés, podemos cambiar el color de todos los puntos, únicamente agregando la indicación color, dentro de las opciones de MAPPINGS.
+
+En primer lugar se pregunto que cargo ostenta la persona que contestó la encuesta, de los cuales se obtuvieron lo siguientes resultados.Dichos resultados los representaremos con una gráfica de barras para su análisis.
+
+```{r}
+barra<-ggplot(data=respuestas)+
+geom_bar(mapping = aes(x=cargo, fill=cargo),
+show.legend = FALSE, width = 1)+
+theme(aspect.ratio = 1)+
+labs(x=NULL, y=NULL)
+barra+coord_flip()
+
+```
+
+Se observa que la mayoria de los que contestaron son Directores de departamento. En los demas puestos se infiere que son pocos los que han alcanzado ese puesto, o decidieron no participar en la encuesta. Los entrevistados manifestaron el cargo que ostentan, el pais del que son, los años de experiencia y su genero. Todas estas variables, serán combinadas y relacionadas entre si para traer una serie de observaciones, las cuales nos permitiran dilusidar el contexto de la informacion.
+
+### Nivel Educativo
+
+```{r}
+ggplot(data=respuestas, mapping = aes(x=genero, fill=educacion))+
+ geom_bar( position = "dodge")+
+ labs(title="Observaciones por sexo y nivel educativo", x="Sexo", y="-
+Observaciones")
+```
+
+Muchos de los que realizaron la encuesta tienen un nivel avanzado en Maestria o Posgrado, en su mayoria hombres. Lo que podemos observar es que hay una mayor participación de hombres en este ramo. A diferencia del genero masculino, las mujeres tienen en su mayoria grado de licenciatura que maestria o posgrado, y su numero es menor que el de los varones.
+
+### Paises que participaron
+
+```{r}
+ggplot(data=respuestas, mapping = aes(x=factor(1), fill=pais))+
+geom_bar(position = "fill")+
+coord_polar(theta = "y") +
+labs(x="Paises", y="")
+```
+
+Los paises que participaron en esta encuesta tiene en su mayoría participación de México, Colombia y Chile tienen una participación similiar, los demás su participación es mas reducida. Probablemente se deba a que la mayoría de participantes fueron de este país antes mencionado. 
+
+###  Respuestas de la encuesta
+
+El analisis estadistico, se realizo con RStudio con lenghuaje de R, usando RMardown para realizar este ultimo capitulo, la razon de esto es para implementar un cambio en lo se ha estado realizando anteriormente en las tesis del posgrado, para marcar un cambio, esto para introducir a las ciencias de datos a los maestros y compañeros que asi lo deseen.
+
+El cuestionario digital se administró en el mes de agosto, la muestra se recabó en los meses de junio y julio por lo que posteriormente a enviarla por correo a los candidatos seleccionados, se empezaron a recibir a partir del mes de septiembre, este análisis inicio a finales del mismo.
+
+Para la pregunta 1, ¿Tenemos claro la conceptualización del Big Data?. Para señalar la respuesta, se tomo un rango de 1 a 5, donde 1 es: El Big data no cambiará en absoluto a la profesion de Realciones Publicas, hasta el 5 El Big data cambiará sustancialmente la profesión de Relaciones Públicas.
+
+```{r}
+ggplot(data=respuestas)+
+geom_bar(mapping = aes(x=p1, fill=p1),
+show.legend = FALSE, width = 1)+
+theme(aspect.ratio = 1)+
+labs(x="Respuestas", y=NULL)+
+coord_flip()
+```
+
+La respuesta mas sugerida es 5 El Big data cambiará sustancialmente la profesión de Relaciones Públicas. De ahi las otras respuestas no pasasn de 40 en el caso de del 4, y 25 en los casos del 3 y 2.
+
+Inferimos con esto que la mayoria de los que contestaron contemplan que el big data tendrá grandes efectos, aún mas de los que ya estan visibles en esta época, que es un área de alto crecimiento y muy probablemente de mayor demanda en los próximos años.
+
+En la segunda pregunta se consideraron diferentes respuesta donde podrian estar las respuestas correctas para definir el concepto de big data por parte de los encuestados, las respuestas probables fueron las siguientes:
+
+- Cantidades masivas de datos almacenados que proporcionan nuevos conocimientos que antes no estaban disponibles.
+- Un flujo de datos veloz (datos en movimiento) y su procesamiento constante.
+- Una variedad de tipos de datos múltiples de fuentes internas y externas.
+- Datos de alta y baja calidad procedentes de fuentes fiables y no fiables.
+- Interpretación de datos relevantes  para la toma de decisiones estratégica.
+- Una multitud de datos procedentes de  los social media.
+- Relación de contenidos adaptados a diferentes públicos.
+
+De los cuales respondieron como a continuacion se muestra.
+
+```{r}
+p2 <- read.csv("p2.csv")
+view(p2)
+```
+
+En este tible podremos ver que las respuestas: 
+
+- Cantidades masivas de datos almacenados que proporcionan nuevos conocimientos que antes no estaban disponibles. Fueron 152 respuestas por lo que tenemos el 83.98%
+
+- Un flujo de datos veloz (datos en movimiento) y su procesamiento. Fueron 101 respondidos por lo que tenemos el 55.80%.
+
+- Una variedad de tipos de datos múltiples de fuentes internas y externas. Fueron 150 respuestas por lo que tenemos 82.87%.
+
+- Datos de alta y baja calidad procedentes de fuentes fiables y no fiables. Fueron 61 respuestas, por lo que tenemos 33.70%.
+
+- Interpretación de datos relevantes  para la toma de decisiones estratégica. Fueron 120 respuestas, por lo que tenemos 66.30%.
+
+- Una multitud de datos procedentes de  los social media. Fueron 30 respuestas, por lo que tenemos el 16.57%.
+
+- Relación de contenidos adaptados a diferentes públicos. Fueron 40 respuestas, por lo que tenemos el 22.10%
+
+Para la pregunta 3, “Big data” se describe mayoritariamente como un gran volumen y flujo de diferentes formas de datos procedentes de diversas fuentes (externas e internas) en constante procesamiento, que producen nuevos conocimientos Tomando en cuenta esta definición,¿ mi departamento de comunicación/agencia... Ítem: consulta a los clientes (si es consultor)/o a otros departamentos (si trabaja en una organización) y a colegas involucrados en el campo de big data?.
+
+Respuesta si o no, a continuación el gráfico para el análisis de los datos.
+
+```{r}
+ggplot(data=respuestas)+
+geom_bar(mapping = aes(x=p3, fill=p3),
+show.legend = FALSE, width = 1)+
+theme(aspect.ratio = 1)+
+labs(x=NULL, y=NULL)+
+coord_flip()
+  
+```
+La mayoría de los encuestados respondieron que si, lo que significa que la mayoría consultan a sus clientes o empleados que estan involucrados en el area del big data.
+
+En la pregunta 4 se dieron 3 opciones de respuesta para la pregunta ¿Cómo usa su departamento o agencia los análisis del big data?.
+
+- Nosotros analizamos big data para planificar las estrategias generales
+- Nosotros analizamos big data para guiar las acciones del día a día
+- Nosotros analizamos big data para justificar nuestras actividades
+
+Los datos que se recabaron se muestran a continuación:
+
+```{r}
+ggplot(data=respuestas)+
+geom_bar(mapping = aes(x=p4, fill=p4),
+show.legend = FALSE, width = 1)+
+theme(aspect.ratio = 1)+
+labs(x=NULL, y=NULL)+
+coord_flip()
+```
+
+Los macrodatos han surgido como una poderosa herramienta que las organizaciones pueden utilizar para aprovechar la toma de decisiones basada en datos para una mejor planificación estratégica, determinando cuáles son los segmentos de mercado de sus productos, clientes y zonas geográficas que están creciendo o disminuyendo, obteniendo datos sobre los visitantes de sus tiendas o sitio web, incluyendo de dónde vienen, qué dispositivos utilizan, qué páginas visitan, el tiempo de permanencia, y las tendencias de tráfico ayudan a analizar qué promociones y esfuerzos impulsan con éxito el negocio.
+
+La gestión de datos masivos y el uso de las redes sociales han cambiado el panorama de la comunicación online, y aunque existe aún un desconocimiento de este tipo de análisis en el rubro, su uso es cada vez más necesario.
+
+Los proyectos de Big Data están en auge y tienen máxima prioridad, debido al análisis en tiempo real que logra. Pero más allá de la velocidad, lo que realmente es fundamental, es la veracidad, la confianza en los datos para realizar la toma de decisiones correcta.
+
+Para la pregunta 5,  ¿Cuáles son los tres (3) principales retos para la profesión dé comunicación estratégica en general cuando se trabaja con big data?. Se dieron diferentes opciones de respuesta, de las cuales se dieron la opcion de elegir 3, pero algunos de los encuestados respondierons hasata 4:
+
+- Falta de habilidades técnicas (para manejar el big data)
+- Falta de tiempo para estudiar/analizar el big data
+- Falta de soluciones de software que encajen con las necesidades de comunicación
+- La calidad de los datos
+- Seguridad de los datos y gestión del riesgo
+- Falta de presupuesto
+- Barreras organizacionales
+- Preocupaciones éticas
+- Restricciones legales
+
+Para este caso analizaremos la siguientes matriz que se hizo de la pregunta numero 5.
+
+```{r}
+p5 <- read.csv("p5.csv")
+view(p5)
+```
+
+Las respuestas que se muestran de 181 personas encuestadas son de la siguiente manera:
+
+R1. 134 = 74.03%
+R2. 104 = 57.46%
+R3. 92 = 50.83%
+R4. 93 = 51.38%
+R5. 35 = 19.34%
+R6. 42 = 23.20%
+R7. 16 = 8.84%
+R8. 11 = 6.08%
+R9. 10 = 5.52%
+
+Los 4 primeros lugares representan un desconocimiento real de lo que es big data, y ahora explicaremos cada una de las que nos referimos. La primera y la segunda, Falta de habilidades técnicas (para manejar el big data) y Falta de tiempo para estudiar/analizar el big data, se puede resolver con la contratación de alguien que sepa de analisis de datos. Esto con la finalidad de poder aplicar sus conocimientos y herramientas que usas para obtener, resguardar, analisis y visualización de datos para:
+
+- Elaborar estrategias
+- Tener una visión mas exacta del negocio
+- Poder tomar desiciones en tiempo real
+- Apoyar con la segmentación de stakehoders y clientes
+- Planificar y predecir
+- Evitar pérdida de clientes
+
+No existe una rezon lógica para justificar esta respuesta, dado que siempre hay tiempo para poder aprender nuevas habilidades ténicas, o sino para contratar a alguien que sepa de esto y analice que esta pasando con el negocio, esto si se quiere realmente crecer, por que para la respuesta 3 ya es diferente el razonamiento.
+
+Y este es la falta de conocimiento de las herramientas que existen hoy en dia, R, Python, SQL, Tablue, incluso el mismo excel son herramientas que se pueden utilizar para analizar datos, los cuales son necesarios obtener resultados que satisfagan las necesidad de los stakeholders y clientes de cada organizacion. 
+
+EL conocer estas herramientas nos permite conocer un mundo con menos barreras y aprovechar dicho saber para la obtencion de nuevas formas de comunicar datos y transmitir ideas. 
+ 
+ segung Hubspot en su artículo "Introduccion al analisis de datos", al tener en cuenta que actualmente la analítica aumentada es «un impulsor dominante
+de nuevas herramientas tecnológicas que [hacen] del propio proceso de analítica de datos algo sencillo y accesible para gran parte de los perfiles de una organización», resulta determinante invertir en un departamento de Business Intelligence, o por lo menos en un asesor de análisis de datos, para sustentar las decisiones empresariales en evidencias rigurosas. Las experiencias empresariales recientes han dejado muy claro que los analistas de datos son esenciales para ayudar a los corporativos a obtener conclusiones basadas en la información sobre el alcance de sus datos, las formas de mejorar la recopilación y explotación de los mismos. Además de que potencian otros roles dentro la empresa para revelar la información valiosa que aún no se aprovecha.
+
+Lo que finalmente nos lleva a uno de los usos más interesantes del análisis de datos: la creación de argumentos o historias sólidas que nos ayuden a comprender cómo está desempeñándose la empresa.
+
+La calidad de los datos, existe como proceso mejora la efectividad de las decisiones, siempre y cuando los datos que sean analizados sean de utilidad. Allí radica la importancia de la calidad de datos dentro de este proceso. Mientras la base que alimente los procesos y sistemas de Big Data sea mejor, más potente y de calidad, las decisiones serán más acertadas logrando minimizar al extremo la incertidumbre o los fallos.
+
+La mala calidad de datos es considerada como uno de los principales problemas con los que las empresas de cualquier sector se deben enfrentar hoy en día. Poseer datos sin calidad puede representar una desventaja no solo en los procesos de información, sino en la competencia directa dentro de un mercado afectando procesos fundamentales como las estimaciones de rentabilidad, control de calidad de procesos y satisfacción del cliente.
+
+En la pregunta 6, El engagement es un concepto muy debatido en la sociedad y en las organizaciones actualmente. ¿Qué significado tiene para usted? Responde con el argumento que mas coincida con tu opinión. Engagement significa estar interesado o sentirse involucrado (cognitiva), dando una respuesta de un rango de 1 al 5, donde el 1 es totalmente en desacuerdo y el 5 Totalmente de acuerdo.
+
+Por lo que haremos un gráfico para su análisis.
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p6, fil= p6))
+```
+
+Para la mayoria de los encuestados creen que no estan del todo de acuerdo en que el engagement es estar interesado o sentirse involucrado, pero si se acerca al estar totalmente de acuerdo si se suman los dos primero resultados. 
+
+Engagement significa estar entusiasmado, orgulloso o vinculado (afectiva), se realiza el siguiente gráfico para visualizar las respuestas.
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p7, fill= p7))
+```
+
+Para los encuestados el Engagement, la mayoría, si cree que significa estar entuasiasmado, orgulloso o vinculado.
+
+Engagement significa estar deseando colaborar o motivado para mejorar (participativa), hacemos un gráfico para analizar las respuestas que se dieron en el contexto de la encuesta.
+
+```{r}
+ggplot(data=respuestas)+
+geom_bar(mapping = aes(x=p8, fill=p8),
+show.legend = FALSE, width = 1)+
+theme(aspect.ratio = 1)+
+labs(x=NULL, y=NULL)+
+coord_flip()
+```
+Las respuestas nos indican que no es relevante esta pregunta para los encuestados. 
+
+Para Sara Martin en su artículo de Metricool de junio 2022, nos dice que el engament es: 
+
+El engagement es el grado en el que un consumidor interactúa con tu marca, el compromiso que se genera entre tu marca y los usuarios.Es la capacidad de un producto o una empresa, de crear relaciones sólidas y duraderas con sus usuarios generando compromiso. Compromiso que se establece entre la marca y los consumidores. Cuanto más sepas sobre los usuarios, mejores tácticas podrás implantar en tus estrategias para conseguir que esa relación sea sólida y duradera.Este engagement hará que tus usuarios traigan nuevos seguidores. Tener usuarios comprometidos con tu marca es imprescindible, porque con el paso del tiempo se convertirán en evangelizadores de tu marca. El éxito de tu negocio depende de los usuarios recurrentes.
+
+Para la pregunta 9, tenia la indicación de elejir hasta 3 respuestas, pero algunos decidieron contestar 4, por lo que se dio como valida la pregunta aun con esa situación, por lo que quedo de la siguiente manera:
+
+```{r}
+p9<- read.csv("p9.csv")
+```
+
+Las respuestas que se muestran de 181 personas encuestadas son de la siguiente manera:
+
+R1. 150 = 82.87%
+R2. 90 = 49.72%
+R3. 91 = 50.28%
+R4. 82 = 45.30%
+R5. 80 = 44.20%
+R6. 40 = 22.10%
+
+En este caso las respuestas que se dieron son las siguientes:
+
+- Hablan positivamente de la organización a otros.
+- Trabajan conjuntamente con la organización.
+- Comunican activamente con la organización o dan información de retorno.
+- Se convierten en apoyos institucionales.
+- Influencian la toma de decisiones de la organización.
+- Se informan ellos mismos sobre la organización.
+
+## Stakeholders
+
+¿En qué medida son importantes los siguientes medios para comunicarse con stakeholders, gatekeepers y audiencias? Contesta con el argumento que mas se acerque a tu opinión. En este orden se hicieron diferentes preguntas con un rango de respuesta del 1 al 5, donde el 1 significa Nada Importante y el 5 Muy Importante. Las respuestas de cada pregunta se muestran con un plot (gráfica), donde se 
+
+Social media y redes sociales(Blogs, Twitter, Facebook y análogos)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p10, fill= p10))
+```
+
+Muchos de los directores de área le dan importancia a las redes sociales, las cuales son tomadas de importantes a muy importantes, en el gráfico se muestra ese razonamiento. Muchos ponen como muy importante dichos canales de comunicación para dar a conocer las ideas, objetivos y productos hacia los publicos externos. Considera de gran relevancia la presencia digital para fomentar el engagement.
+
+
+Comunicación online vía webs, e-mail, intranets
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p11, fill= p11))
+```
+
+La comunicación con los publicos internos, es de gran importancia para los comunicadores, esto reflejado en el gráfico de muestra la valia de dichos canalaes para publico interno y externo, para el interno la intranet es una gran base de datos que pueden utilizar para allegar de herramientas que les permitan la toma de desiciones, con esta pueden de igual manera comunicar a sus stakeholders las necesidades y cumplimiento de objetivos a los que estan obligados. Para los públicos externos, la estrtaegia de email marketing surte efecto si esta bien cimentada en datos, dado que estos permiten estrategar en referiencia hacia que temas tiene mayor intereses los consumidores y cuales serian las palabras clave y/o instrumentos a utilizar para hacerles llegar los productos o servicios que quieren promocionar o dar conocer.
+
+
+Comunicación a través de móviles(apps, sitios web para celulares/tabletas)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p12, fill= p12))
+```
+
+Para la estrategia de aparatos de manos como moviles o tablets, tambien son indispensables para su plan de comunicación, estrategia de marketing y de relaciones públicas. La implementación es la que veo que no esta muy bien especificada en sus planes de comunicación, dado que no tienen la infraestructura para llevar a cabo este tipo de estrategia. Son medios caros de realizar y no tienen la experiencia para llevarla a cabo, talvez sea una percepcion erronea dado que es mi opinión.
+
+
+Comunicación cara a cara
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p13, fill= p13))
+```
+
+En la comunicación Cara a Cara es evidente que la mayoría son indispensables para los profesionales de la comunicación, una investigación de la Universidad de Ontario constata que la comunicación cara a cara es 34 veces más exitosa que un correo electrónico. Según los expertos, esto es así porque los gestos, el tono de voz o la mirada, es decir, los elementos de comunicación no verbal, persuaden mucho más al interlocutor que el propio mensaje. En este sentido, recomiendan hacer peticiones en persona siempre que se quiera seducir o persuadir al receptor.
+
+Comunicación no verbal (diseño, arquitectura corporativa)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p14, fill= p14))
+```
+
+La identidad corporativa de una empresa abarca tanto aspectos tangibles de carácter estético como son el diseño del logo, el diseño gráfico corporativo (el desarrollo de todos los elementos de comunicación de una empresa), tipografías, colores, papelería corporativa, los elementos de comunicación externa e interna, publicidad, protocolo, arquitectura corporativa, como aspectos intangibles, por ejemplo la filosofía de la propia organización o empresa, su misión y sus valores, además de otros factores claves para la organización como son sus métodos y procesos, etc.
+
+
+Relaciones con los medios de comunicación online (diarios y revistas)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p15, fill= p15))
+```
+
+Muchas veces las relaciones públicas con los medios de comunicación pueden llegar a ser delicadas. Por un lado, los periodistas se cansan de recibir información y notas de prensa que no tienen nada que ver con el medio para el que trabajan; y desde las agencias de relaciones públicas o cualquier departamento de comunicación se cansan de ir tras ellos tratando de lograr que publiquen alguna noticia relacionada con la marca que tienen al cargo.
+
+
+Eventos
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p16, fill= p16))
+```
+
+Relaciones con los medios de comunicación (TV y radio)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p17, fill= p17))
+```
+
+Publicaciones organizacionales/medios propios (revistas de empleados/clientes)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p18, fill= p18))
+```
+
+Relaciones con los medios de comunicación - medios impresos (diarios y revistas)
+
+```{r}
+ggplot(data=respuestas)+
+  geom_bar(mapping = aes(x=p19, fill= p19))
+```
+
+Estos últimos 4 la información recolectada esta en una media de respuestas, por lo que considero que no es tan necesaria la explicación de cada uno, por esto es neceario hacer un resumen de los resultados para dar explicacion de la información obtenida. Para Eventos, Relaciones con los medios de comunicación (TV y radio), Publicaciones organizacionales/medios propios (revistas de empleados/clientes), Relaciones con los medios de comunicación - medios impresos (diarios y revistas); en estos casos todos tuvieron una respuesta cercana a la media, por lo que no consideran tan importante estos rubros en su comunicacion son sus stakeholders, o lo tienen en sus puntos menos prioritarios de su plan de comunicación. 
+
+En este tipo de medios han sido menos relevantes conforme va pasando el tiempo, teniendo lo digital como canales mas prioritarios en la estrategia de comunicación con stakeholders.
+
+## Implementacion del Big Data
+
+
+
+Para estas respuestas de libre respuesta se graficaron con una nube de palabras para ejemplificarlas, todo esto segun Carlos Jauregui Fernandez, la nube de palabras es uno de los métodos más comunes dentro de la minería de texto (text mining) para resaltar visualmente las palabras más frecuentes en un texto. 
+
+Una nube de palabras o wordcloud nos sirve para visualizar la frecuencia de palabras dentro de un texto. Para generar nubes de palabras, debe descargar el paquete wordcloud en R, así como el paquete RcolorBrewer para los colores. Tenga en cuenta que también hay un paquete wordcloud2 , con un diseño ligeramente diferente y aplicaciones divertidas.
+
+```{r}
+library(wordcloud)
+library(tm)
+library(wesanderson)
+
+```
+
+¿Qué herramientas implementan en su utilización?
+
+```{r}
+a<- read.csv("p20.csv")
+a<- as.character(a)
+a.corpus <- Corpus(VectorSource(a))
+a.corpus <- a.corpus%>%
+  tm_map(removePunctuation)%>%
+  tm_map(removeNumbers)%>%
+  tm_map(stripWhitespace)%>%
+  tm_map(tolower)%>%
+  tm_map(removeWords,stopwords("Spanish"))
+  
+a.corpus <- tm_map(a.corpus,stemDocument)
+a.count <- as.matrix(TermDocumentMatrix(a.corpus))
+a.freq <- sort(rowSums(a.count), decreasing = TRUE)
+head(a.freq)
+```
+```{r}
+wordcloud(words = names(a.freq), freq = a.freq, scale= c(3,0.5), max.words = 50, random.order = TRUE)
+```
+
+Las herramientas mas usadas en este trabajao de investigación para los profesionales de la comuniación, son mailchimp, hojas de cálculo, en poca medida herramientas de escucha (Meltwater), CRM (Salesforce), Google Analitycs y Survey Monkey para encuestas a gran escala para recabar información. 
+
+
+¿Qué software usan para su análisis exploratorio y cual para su visualización de datos?
+
+```{r}
+b<- read.csv("p21.csv")
+b<- as.character(b)
+b.corpus <- Corpus(VectorSource(b))
+b.corpus <- b.corpus%>%
+  tm_map(removePunctuation)%>%
+  tm_map(removeNumbers)%>%
+  tm_map(stripWhitespace)%>%
+  tm_map(tolower)%>%
+  tm_map(removeWords,stopwords("Spanish"))
+  
+b.corpus <- tm_map(b.corpus,stemDocument)
+b.count <- as.matrix(TermDocumentMatrix(b.corpus))
+b.freq <- sort(rowSums(b.count), decreasing = TRUE)
+head(b.freq)
+```
+```{r}
+wordcloud(words = names(b.freq), freq = b.freq, scale= c(3,0.5), max.words = 50, random.order = TRUE)
+```
+
+Data Studio de Google, Metricool, Tablue, Power Bi, SEM Rush, Google Trends; son los principales herramientas que usan los profesionales de la comuniación para el análsisis exploratorio y visualización de datos.
+
+Los lenguajes que usan para dicho análisis en algunos casos son Python y en poca medida R. Si tiene que desarrollar análisis estadísticos o técnicos complejos, puede ahorrar pasos y tiempo si utiliza las Herramientas para análisis. Deberá proporcionar los datos y parámetros para cada análisis, y la herramienta utilizará las funciones de macros estadísticas o técnicas correspondientes para realizar los cálculos y mostrar los resultados en una tabla de resultados. Algunas herramientas generan gráficos además de tablas de resultados.
+
+Segun el portal oficial de Tableau.com, la visualización de datos es la representación gráfica de información y datos. Al utilizar elementos visuales como cuadros, gráficos y mapas, las herramientas de visualización de datos proporcionan una manera accesible de ver y comprender tendencias, valores atípicos y patrones en los datos.
+
+En el mundo del big data, las herramientas y tecnologías de visualización de datos son esenciales para analizar grandes cantidades de información y tomar decisiones basadas en los datos.
+
+Nuestros ojos son atraídos por los colores y patrones. Podemos identificar rápidamente el rojo del azul o el cuadrado del círculo. Nuestra cultura es visual, lo que incluye todo tipo de cosas, desde arte y publicidad hasta televisión y películas.
+
+La visualización de datos es otra forma de arte visual que capta nuestro interés y mantiene nuestros ojos en el mensaje. Cuando vemos un gráfico, vemos rápidamente las tendencias y los valores atípicos. Si podemos ver algo, lo interiorizamos rápidamente. Es contar historias con un propósito. Si alguna vez haz visto una gigantesca hoja de cálculo de datos y no te fue posible ver una tendencia, sabes cuán eficaz puede ser una visualización.
+
+
+¿El que realizar dicha minería de datos, análisis exploratorio y visualización datos es alguien especializado del equipo? Si o NO. ¿Qué especialización tiene para realizarlo?
+
+```{r}
+c<- read.csv("p22.csv")
+c<- as.character(c)
+c.corpus <- Corpus(VectorSource(c))
+c.corpus <- c.corpus%>%
+  tm_map(removePunctuation)%>%
+  tm_map(removeNumbers)%>%
+  tm_map(stripWhitespace)%>%
+  tm_map(tolower)%>%
+  tm_map(removeWords,stopwords("Spanish"))
+  
+c.corpus <- tm_map(c.corpus,stemDocument)
+c.count <- as.matrix(TermDocumentMatrix(c.corpus))
+c.freq <- sort(rowSums(c.count), decreasing = TRUE)
+head(c.freq)
+```
+
+```{r}
+wordcloud(words = names(c.freq), freq = c.freq, scale= c(3,0.5), max.words = 50, random.order = TRUE)
+```
+
+De Igual manera el por portal oficial de Tableau.com nos dice que a medida que la "era del big data" entra en pleno apogeo, la visualización es una herramienta cada vez más importante para darle sentido a las billones de filas de datos que se generan cada día. La visualización de datos ayuda a contar historias seleccionando los datos en una forma más fácil de entender, destacando las tendencias y los valores atípicos. Una buena visualización cuenta una historia, eliminando el ruido de los datos y resaltando la información útil.
+
+Sin embargo, no es tan simple como adornar un gráfico para que se vea mejor o pegar la parte "informativa" de una infografía. La visualización eficaz de datos es un delicado equilibrio entre forma y función. La gráfica más simple podría ser demasiado aburrida para captar la atención del público o lograr que diga algo importante; la visualización más sorprendente podría fallar por completo a la hora de transmitir el mensaje correcto o podría decir mucho. Los datos y los elementos visuales deben trabajar juntos, y hay algo de arte en combinar un gran análisis con una gran narración.
+
+Es difícil pensar en un sector profesional que no se beneficie de hacer que los datos sean más comprensibles. Cada campo STEM (siglas en inglés de ciencia, tecnología, ingeniería y matemáticas) se beneficia de la comprensión de los datos, y también lo hacen los campos de gobierno, finanzas, marketing, historia, bienes de consumo, industrias de servicios, educación, deportes, etc.
+
+Si bien siempre hablaremos poéticamente sobre la visualización de datos (después de todo, estás en el sitio web de Tableau), existen aplicaciones prácticas y reales que son innegables. Y, dado que la visualización es tan prolífica, también es una de las habilidades profesionales más útiles para desarrollar. Cuanto mejor pueda transmitir sus puntos visualmente, ya sea en un dashboard o en una plataforma de diapositivas, mejor podrá aprovechar esa información.
+3 tendencias que hayan detectado sobre la comunicación estratégica después de la pandemia.
+
+```{r}
+d<- read.csv("p23.csv")
+d<- as.character(d)
+d.corpus <- Corpus(VectorSource(d))
+d.corpus <- d.corpus%>%
+  tm_map(removePunctuation)%>%
+  tm_map(removeNumbers)%>%
+  tm_map(stripWhitespace)%>%
+  tm_map(tolower)%>%
+  tm_map(removeWords,stopwords("Spanish"))
+  
+d.corpus <- tm_map(d.corpus,stemDocument)
+d.count <- as.matrix(TermDocumentMatrix(d.corpus))
+d.freq <- sort(rowSums(d.count), decreasing = TRUE)
+head(d.freq)
+```
+
+```{r}
+wordcloud(words = names(d.freq), freq = d.freq, scale= c(3,0.5), max.words = 50, random.order = TRUE)
+```
+
+Para esta ultima pregunta es algo dificil de resumir dada la cantidad de respuestas que tiene, pero podemos decir que las 3 tendencias mas significativas que predicen los profesionales de la comunicación son las siguientes:
+
+1. La disminución de la credibilidad de los medios tradicionales.
+2. Información mas online, menos contacto personal, resistencia a dar información.
+3. La virtualidad del metaverso y de los eventos masivos, la microsegmentación en los planes de marketing de las organizaciones y el usos más frecuente del big data. 
+
+## Conclusión
+
+
